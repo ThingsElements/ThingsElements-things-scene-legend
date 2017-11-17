@@ -22,13 +22,13 @@ const NATURE = {
       }, {
         display: 'Vertical',
         value: 'vertical'
-      }, {
-        type: 'number',
-        label: 'round',
-        name: 'round',
-        property: 'round'
       }]
     }
+  }, {
+    type: 'number',
+    label: 'round',
+    name: 'round',
+    property: 'round'
   }]
 }
 
