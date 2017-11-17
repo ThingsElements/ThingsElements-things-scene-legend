@@ -78,9 +78,9 @@ export default class LegendItem extends Container {
     return true;
   }
 
-  get controls() {}
+  get controls() { }
 
-  get nature(){
+  get nature() {
     return NATURE;
   }
 

@@ -4,6 +4,7 @@ Copyright © HatioLab Inc. All rights reserved.
 -->
 <!doctype html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
@@ -23,23 +24,21 @@ Copyright © HatioLab Inc. All rights reserved.
     <link rel="import" href="./things-theme.html">
 
     <style is="custom-style" include="things-theme">
-    things-scene-viewer {
-      display: block;
-      width: 640px;
-      height: 480px;
-    }
+      things-scene-viewer {
+        display: block;
+        width: 640px;
+        height: 480px;
+      }
     </style>
   </head>
+
   <body unresolved>
 
     <template is="dom-bind" id="app">
-      <p>An example of <code>&lt;legend&gt;</code>:</p>
+      <p>An example of
+        <code>&lt;legend&gt;</code>:</p>
 
-      <things-scene-viewer id='scene'
-                           scene='{{scene}}'
-                           selected='{{selected}}'
-                           model='[[model]]'
-                           mode="1">
+      <things-scene-viewer id='scene' scene='{{scene}}' selected='{{selected}}' model='[[model]]' mode="1">
         <things-scene-layer type="selection-layer"></things-scene-layer>
         <things-scene-layer type="modeling-layer"></things-scene-layer>
         <things-scene-handler type="text-editor"></things-scene-handler>
@@ -53,17 +52,17 @@ Copyright © HatioLab Inc. All rights reserved.
     </template>
 
     <script>
-      window.addEventListener('WebComponentsReady', function(e) {
+      window.addEventListener('WebComponentsReady', function (e) {
         var app = document.querySelector('#app')
 
         app.props = {}
 
-        setTimeout(function() {
-          app.scene.on('selected', function(after) {
+        setTimeout(function () {
+          app.scene.on('selected', function (after) {
             var target = after[0]
             var props = {}
-            if(target) {
-              target.nature.properties.forEach(function(prop) {
+            if (target) {
+              target.nature.properties.forEach(function (prop) {
                 var property = prop.property
                 props[property] = target.model[property]
               })
@@ -72,7 +71,7 @@ Copyright © HatioLab Inc. All rights reserved.
           });
         });
 
-        app.$.props.addEventListener('change', function() {
+        app.$.props.addEventListener('change', function () {
           app.selected[0].set(app.props)
         });
 
@@ -2864,7 +2863,7 @@ Copyright © HatioLab Inc. All rights reserved.
             target: "threed",
             top: 430,
             left: 10,
-            width:620,
+            width: 620,
             height: 20,
             fontSize: 40,
             direction: 'horizontal',
@@ -2880,4 +2879,5 @@ Copyright © HatioLab Inc. All rights reserved.
       });
     </script>
   </body>
+
 </html>

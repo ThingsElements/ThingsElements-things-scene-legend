@@ -6,7 +6,7 @@ const NATURE = {
   mutable: false,
   resizable: true,
   rotatable: true,
-  properties : [{
+  properties: [{
     type: 'string',
     label: 'target',
     name: 'target',
@@ -34,7 +34,7 @@ const NATURE = {
 
 var controlHandler = {
 
-  ondragmove: function(point, index, component) {
+  ondragmove: function (point, index, component) {
 
     var { left, top, width, height } = component.model
     /*
@@ -44,7 +44,7 @@ var controlHandler = {
       * 컴포넌트자신에 대한 transcoord만 필요하다.(마지막 파라미터를 false로).
       */
     var transcoorded = component.transcoordP2S(point.x, point.y)
-    var round = (transcoorded.x - left) / (width/2) * 100
+    var round = (transcoorded.x - left) / (width / 2) * 100
 
     round = roundSet(round, width, height)
 
@@ -52,12 +52,12 @@ var controlHandler = {
   }
 }
 
-function roundSet(round, width, height){
+function roundSet(round, width, height) {
   var max = width > height ? (height / width) * 100 : 100
 
-  if(round >= max)
+  if (round >= max)
     round = max
-  else if(round <= 0)
+  else if (round <= 0)
     round = 0
 
   return round
@@ -112,13 +112,13 @@ export default class Legend extends Container {
     this.drawFill(context);
     this.drawStroke(context);
 
-    if(this.target) {
-      if(this.size() !== this.target.model.stockStatus.ranges.length)
+    if (this.target) {
+      if (this.size() !== this.target.model.stockStatus.ranges.length)
         this.rebuildLegendItems(context)
     } else {
       // TODO target이 잘못되거나 안되어있다는 경고 의미로 뭔가 그려라..
       var componentsLength = this.components.length;
-      for(var i = componentsLength - 1 ; i >= 0; i-- ) {
+      for (var i = componentsLength - 1; i >= 0; i--) {
         var legendItem = this.components[i]
         this.removeComponent(legendItem)
       }
@@ -132,14 +132,14 @@ export default class Legend extends Container {
 
 
     return [{
-      x: left + (width/2) * (round/100),
+      x: left + (width / 2) * (round / 100),
       y: top,
       handler: controlHandler
     }]
   }
 
   get layout() {
-    if(this.model.direction == 'horizontal')
+    if (this.model.direction == 'horizontal')
       return LinearHorizontalLayout;
     else
       return LinearVerticalLayout;
@@ -147,12 +147,12 @@ export default class Legend extends Container {
 
   get target() {
     var { target } = this.model
-    if(!target)
+    if (!target)
       return null
 
-    if(!this._target) {
+    if (!this._target) {
       this._target = this.root.findById(target)
-      if(this._target)
+      if (this._target)
         this._target.on('change', this.onTargetChanged, this)
     }
 
@@ -160,14 +160,14 @@ export default class Legend extends Container {
   }
 
   set target(target) {
-    if(this.target)
+    if (this.target)
       this.target.off('change', this.onTargetChanged, this)
 
     this._target = null
     this.model.target = target
   }
 
-  get nature(){
+  get nature() {
     return NATURE;
   }
 
@@ -201,7 +201,7 @@ export default class Legend extends Container {
 
     let componentsLength = this.components.length
 
-    for(var i=componentsLength-1; i>=0; i--) {
+    for (var i = componentsLength - 1; i >= 0; i--) {
       this.removeComponent(this.components[i])
     }
 
@@ -235,14 +235,14 @@ export default class Legend extends Container {
   }
 
   dispose() {
-    if(this.target)
+    if (this.target)
       this.target.off('change', this.onTargetChanged, this)
 
     super.dispose();
   }
 
   onchange(after, before) {
-    if(after.hasOwnProperty("target")){
+    if (after.hasOwnProperty("target")) {
       this.target = after.target
       this.invalidate()
       return;
