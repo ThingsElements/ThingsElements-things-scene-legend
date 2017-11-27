@@ -161,10 +161,13 @@ export default class Legend extends Container {
 
   rebuildLegendItems() {
 
-    this.components.slice().forEach(m => m.dispose())
+    if(this.components.length)
+      this.components.slice().forEach(m => m.dispose())
 
-    if(!this.target)
+    if(!this.target) {
+      this.set('layoutConfig', null)
       return
+    }
 
     var {
       left,
@@ -206,6 +209,8 @@ export default class Legend extends Container {
       textAlign
     })))
 
+    var rows, columns
+
     if(!columns && !rows) {
       rows = count
       columns = 1
@@ -215,7 +220,11 @@ export default class Legend extends Container {
       columns = Math.ceil(count / Number(rows))
     }
 
-    this.set({ rows, columns })
+    this.set({
+      layoutConfig: {
+        rows, columns
+      }
+    })
   }
 
   dispose() {
@@ -226,8 +235,10 @@ export default class Legend extends Container {
   }
 
   onchange(after, before) {
-    if (before.hasOwnProperty('target') || after.hasOwnProperty('target'))
+    if (before.hasOwnProperty('target') || after.hasOwnProperty('target')) {
       this._target && this._target.off('change', this.onTargetChanged, this)
+      delete this._target
+    }
 
     this.rebuildLegendItems()
   }
