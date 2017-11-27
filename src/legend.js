@@ -9,8 +9,15 @@ const NATURE = {
   properties: [{
     type: 'string',
     label: 'target',
-    name: 'target',
-    property: 'target'
+    name: 'target'
+  }, {
+    type: 'number',
+    label: 'rows',
+    name: 'rows'
+  }, {
+    type: 'number',
+    label: 'columns',
+    name: 'columns'
   }, {
     type: 'select',
     label: 'direction',
@@ -27,8 +34,7 @@ const NATURE = {
   }, {
     type: 'number',
     label: 'round',
-    name: 'round',
-    property: 'round'
+    name: 'round'
   }]
 }
 
@@ -63,9 +69,13 @@ function roundSet(round, width, height) {
   return round
 }
 
-var { Model, Container, RectPath, Shape, LinearHorizontalLayout, LinearVerticalLayout } = scene
+var { Model, Container, TableLayout } = scene
 
 export default class Legend extends Container {
+
+  ready() {
+    this.rebuildLegendItems()
+  }
 
   _draw(context) {
 
@@ -111,25 +121,12 @@ export default class Legend extends Container {
 
     this.drawFill(context);
     this.drawStroke(context);
-
-    if (this.target) {
-      if (this.size() !== this.target.model.stockStatus.ranges.length)
-        this.rebuildLegendItems(context)
-    } else {
-      // TODO target이 잘못되거나 안되어있다는 경고 의미로 뭔가 그려라..
-      var componentsLength = this.components.length;
-      for (var i = componentsLength - 1; i >= 0; i--) {
-        var legendItem = this.components[i]
-        this.removeComponent(legendItem)
-      }
-    }
   }
 
   get controls() {
 
     var { left, top, width, round, height } = this.model;
     round = round == undefined ? 0 : roundSet(round, width, height)
-
 
     return [{
       x: left + (width / 2) * (round / 100),
@@ -139,39 +136,36 @@ export default class Legend extends Container {
   }
 
   get layout() {
-    if (this.model.direction == 'horizontal')
-      return LinearHorizontalLayout;
-    else
-      return LinearVerticalLayout;
+    return TableLayout
   }
 
   get target() {
     var { target } = this.model
-    if (!target)
-      return null
 
-    if (!this._target) {
+    if (!this._target && target) {
       this._target = this.root.findById(target)
-      if (this._target)
-        this._target.on('change', this.onTargetChanged, this)
+      this._target && this._target.on('change', this.onTargetChanged, this)
     }
 
     return this._target
-  }
-
-  set target(target) {
-    if (this.target)
-      this.target.off('change', this.onTargetChanged, this)
-
-    this._target = null
-    this.model.target = target
   }
 
   get nature() {
     return NATURE;
   }
 
+  onTargetChanged(after, before) {
+    if(after.hasOwnProperty('stockStatus') && before.hasOwnProperty('stockStatus'))
+      this.rebuildLegendItems()
+  }
+
   rebuildLegendItems() {
+
+    this.components.slice().forEach(m => m.dispose())
+
+    if(!this.target)
+      return
+
     var {
       left,
       top,
@@ -183,70 +177,59 @@ export default class Legend extends Container {
       fontFamily,
       fontSize,
       lineHeight,
+      textAlign = 'left',
       round = 0,
       italic,
       bold,
-      lineWidth = 0
+      lineWidth = 0,
+      rows,
+      columns
     } = this.model
 
-    var target = this.target
-    let children = []
-
-    let status = target.model.stockStatus
-    let statusField = status.field
+    let status = this.target.model.stockStatus
     let statusRanges = status.ranges
 
-    let components = target.components
-    let label_height = this.labelHeight
+    var count = statusRanges.length
 
-    let componentsLength = this.components.length
+    this.add(statusRanges.map(range => Model.compile({
+      type: 'legend-item',
+      text: `${range.min || ''} ~ ${range.max || ''}`,
+      width: 1,
+      height: 1,
+      color: range.color,
+      fontColor,
+      fontFamily,
+      fontSize,
+      lineHeight,
+      italic,
+      bold,
+      textAlign
+    })))
 
-    for (var i = componentsLength - 1; i >= 0; i--) {
-      this.removeComponent(this.components[i])
+    if(!columns && !rows) {
+      rows = count
+      columns = 1
+    } else if(columns && !rows) {
+      rows = Math.ceil(count / Number(columns))
+    } else if(rows && !columns) {
+      columns = Math.ceil(count / Number(rows))
     }
 
-    var lastMax
-
-    var offset = Math.floor(round > 0 ? round / 2 : 0);
-
-    for (let i = 0; i < statusRanges.length; i++) {
-      let range = statusRanges[i];
-
-      children.push(Model.compile({
-        type: 'legend-item',
-        text: `${range.min || lastMax || 0} <= ${statusField} < ${range.max}`,
-        boxColor: range.color,
-        fontColor: fontColor,
-        fontFamily: fontFamily,
-        fontSize: fontSize,
-        lineHeight: lineHeight,
-        italic: italic,
-        bold: bold,
-        width: width,
-        height: height
-      }))
-
-      lastMax = range.max;
-    }
-
-    this.add(children)
-
-    this.reflow()
+    this.set({ rows, columns })
   }
 
   dispose() {
-    if (this.target)
-      this.target.off('change', this.onTargetChanged, this)
+    this._target && this._target.off('change', this.onTargetChanged, this)
+    delete this._target
 
     super.dispose();
   }
 
   onchange(after, before) {
-    if (after.hasOwnProperty("target")) {
-      this.target = after.target
-      this.invalidate()
-      return;
-    }
+    if (before.hasOwnProperty('target') || after.hasOwnProperty('target'))
+      this._target && this._target.off('change', this.onTargetChanged, this)
+
+    this.rebuildLegendItems()
   }
 }
 

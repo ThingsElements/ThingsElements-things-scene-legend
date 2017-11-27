@@ -5,89 +5,56 @@
 const NATURE = {
   mutable: false,
   resizable: false,
-  rotatable: false
+  rotatable: false,
+  properties: []
 }
 
-var { Model, Container, RectPath, Shape } = scene
+var { Model, Component, RectPath, Shape } = scene
 
-export default class LegendItem extends Container {
+export default class LegendItem extends RectPath(Shape) {
 
-  _post_draw(context) {
-    super._post_draw(context);
-
-    if (this.model.text && this.size() === 0) {
-      this.initialize();
-    }
-  }
-
-  initialize() {
-
-    var {
-      text,
-      fillStyle,
-      strokeStyle,
-      fontFamily,
-      lineWidth = 0,
-      boxColor
-    } = this.model;
-
+  _draw(context) {
     var {
       left,
       top,
-      width,
-      height
-    } = this.bounds;
+      height,
+      color
+    } = this.model
 
-    var children = [];
+    context.beginPath();
 
-    var minSize = Math.min(width, height)
-    children.push(Model.compile({
-      type: 'rect',
-      fillStyle: boxColor,
-      // strokeStyle: strokeStyle,
-      left: lineWidth * 0.5 + minSize * 0.3 * 0.5,
-      top: lineWidth * 0.5 + minSize * 0.3 * 0.5,
-      width: minSize * 0.7,
-      height: minSize * 0.7,
-      locked: true
-    }))
+    var c = height / 2
+    var r = c / 2
 
-    children.push(Model.compile({
-      type: 'text',
-      text: text,
-      left: minSize * 0.15 + minSize + lineWidth,
-      top: minSize * 0.15 + lineWidth,
-      width: width - minSize - minSize * 0.3 - lineWidth * 2,
-      height: height - minSize * 0.3 - lineWidth * 2,
-      textAlign: 'left',
-      textWrap: true,
-      fontFamily,
-      locked: true
-    }))
+    context.save()
 
-    this.add(children)
+    context.fillStyle = color
+    context.ellipse(left + c, top + c, r, r, 0, 0, Math.PI * 2, true)
+    context.shadowColor = '#777';
+    context.shadowBlur = 2;
+    context.shadowOffsetX = 2;
+    context.shadowOffsetY = 2;
+    context.fill()
+
+    context.restore()
   }
 
-  reinitialize() {
-    this.remove(this.components);
-
-    this.initialize();
+  onchange(after) {
+    if(after.hasOwnProperty('height'))
+      this.set('paddingLeft', after.height)
   }
 
   get stuck() {
     return true;
   }
 
-  get controls() { }
+  get capturable() {
+    return false
+  }
 
   get nature() {
     return NATURE;
   }
-
-  onchange(after, before) {
-    this.reinitialize();
-  }
-
 }
 
 scene.Component.register('legend-item', LegendItem);
