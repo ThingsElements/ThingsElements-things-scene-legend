@@ -30,9 +30,9 @@ export default class LegendItem extends RectPath(Shape) {
 
     context.fillStyle = color
     context.ellipse(left + c, top + c, r, r, 0, 0, Math.PI * 2, true)
-    context.shadowColor = '#777';
+    context.shadowColor = 'rgba(0,0,0,0.15)';
     context.shadowBlur = 2;
-    context.shadowOffsetX = 2;
+    context.shadowOffsetX = 1;
     context.shadowOffsetY = 2;
     context.fill()
 
