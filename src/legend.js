@@ -7,10 +7,6 @@ const NATURE = {
   resizable: true,
   rotatable: true,
   properties: [{
-    type: 'string',
-    label: 'target',
-    name: 'target'
-  }, {
     type: 'number',
     label: 'rows',
     name: 'rows'
@@ -35,6 +31,10 @@ const NATURE = {
     type: 'number',
     label: 'round',
     name: 'round'
+  }, {
+    type: 'stock-status',
+    label: '',
+    name: 'status'
   }]
 }
 
@@ -139,35 +139,14 @@ export default class Legend extends Container {
     return TableLayout
   }
 
-  get target() {
-    var { target } = this.model
-
-    if (!this._target && target) {
-      this._target = this.root.findById(target)
-      this._target && this._target.on('change', this.onTargetChanged, this)
-    }
-
-    return this._target
-  }
-
   get nature() {
     return NATURE;
-  }
-
-  onTargetChanged(after, before) {
-    if(after.hasOwnProperty('stockStatus') && before.hasOwnProperty('stockStatus'))
-      this.rebuildLegendItems()
   }
 
   rebuildLegendItems() {
 
     if(this.components.length)
       this.components.slice().forEach(m => m.dispose())
-
-    if(!this.target) {
-      this.set('layoutConfig', null)
-      return
-    }
 
     var {
       left,
@@ -186,11 +165,11 @@ export default class Legend extends Container {
       bold,
       lineWidth = 0,
       rows,
-      columns
+      columns,
+      status = {}
     } = this.model
 
-    let status = this.target.model.stockStatus
-    let statusRanges = status.ranges
+    let statusRanges = status.ranges || []
 
     var count = statusRanges.length
 
@@ -227,18 +206,7 @@ export default class Legend extends Container {
     })
   }
 
-  dispose() {
-    this._target && this._target.off('change', this.onTargetChanged, this)
-    delete this._target
-
-    super.dispose();
-  }
-
   onchange(after, before) {
-    if (before.hasOwnProperty('target') || after.hasOwnProperty('target')) {
-      this._target && this._target.off('change', this.onTargetChanged, this)
-      delete this._target
-    }
 
     this.rebuildLegendItems()
   }
