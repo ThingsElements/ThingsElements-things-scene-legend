@@ -206,6 +206,14 @@ export default class Legend extends Container {
     })
   }
 
+  get hasTextProperty() {
+    return true
+  }
+
+  get textHidden() {
+    return true
+  }
+
   onchange(after, before) {
 
     this.rebuildLegendItems()
