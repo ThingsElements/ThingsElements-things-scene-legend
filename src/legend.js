@@ -32,7 +32,7 @@ const NATURE = {
     label: 'round',
     name: 'round'
   }, {
-    type: 'stock-status',
+    type: 'legend-status',
     label: '',
     name: 'status'
   }]
