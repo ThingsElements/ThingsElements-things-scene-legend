@@ -1,6 +1,6 @@
 {
   "name": "things-scene-legend",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "An legend component for things-scene.",
   "main": "index.js",
   "directories": {

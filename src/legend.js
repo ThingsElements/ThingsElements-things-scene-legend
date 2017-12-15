@@ -77,6 +77,10 @@ export default class Legend extends Container {
     this.rebuildLegendItems()
   }
 
+  get showMoveHandle() {
+    return false;
+  }
+
   _draw(context) {
 
     var {
