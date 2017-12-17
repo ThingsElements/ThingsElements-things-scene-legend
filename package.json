@@ -1,7 +1,7 @@
 {
   "name": "@things-elements/things-scene-legend",
   "flat": true,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "The legend component for things-scene.",
   "main": "things-scene-legend-min.js",
   "directories": {
@@ -39,6 +39,6 @@
     "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
-    "things-scene": "^2.2.19"
+    "@hatiolab/things-scene": "^2.2.36"
   }
 }
