@@ -179,7 +179,7 @@ export default class Legend extends Container {
 
     this.add(statusRanges.map(range => Model.compile({
       type: 'legend-item',
-      text: `${range.min || ''} ~ ${range.max || ''}`,
+      text: range.description || `${range.min || ''} ~ ${range.max || ''}`,
       width: 1,
       height: 1,
       color: range.color,
