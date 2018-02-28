@@ -1,6 +1,7 @@
 /*
  * Copyright © HatioLab Inc. All rights reserved.
  */
+import { Model, Component, Container, TableLayout } from '@hatiolab/things-scene'
 
 const NATURE = {
   mutable: false,
@@ -68,8 +69,6 @@ function roundSet(round, width, height) {
 
   return round
 }
-
-var { Model, Container, TableLayout } = scene
 
 export default class Legend extends Container {
 
@@ -149,7 +148,7 @@ export default class Legend extends Container {
 
   rebuildLegendItems() {
 
-    if(this.components.length)
+    if (this.components.length)
       this.components.slice().forEach(m => m.dispose())
 
     var {
@@ -194,12 +193,12 @@ export default class Legend extends Container {
 
     var rows, columns
 
-    if(!columns && !rows) {
+    if (!columns && !rows) {
       rows = count
       columns = 1
-    } else if(columns && !rows) {
+    } else if (columns && !rows) {
       rows = Math.ceil(count / Number(columns))
-    } else if(rows && !columns) {
+    } else if (rows && !columns) {
       columns = Math.ceil(count / Number(rows))
     }
 
@@ -224,4 +223,4 @@ export default class Legend extends Container {
   }
 }
 
-scene.Component.register('legend', Legend);
+Component.register('legend', Legend);
