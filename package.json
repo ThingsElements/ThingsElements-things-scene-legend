@@ -1,9 +1,9 @@
 {
-  "name": "@things-elements/things-scene-legend",
-  "version": "0.1.11",
+  "name": "@things-scene/legend",
+  "version": "0.2.0",
   "description": "The legend component for things-scene.",
   "main": "src/index.js",
-  "things-shell": true,
+  "things-scene": true,
   "directories": {
     "test": "test"
   },
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ThingsElements/things-scene-legend#readme",
   "devDependencies": {
-    "@hatiolab/things-shell": "^0.2.20"
+    "@hatiolab/things-shell": "^0.3.0"
   },
   "dependencies": {
     "@hatiolab/things-scene": "^2.2.36"
