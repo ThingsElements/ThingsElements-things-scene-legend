@@ -81,7 +81,7 @@ export default class Legend extends Container {
     return false;
   }
 
-  _draw(context) {
+  render(context) {
 
     var {
       round = 0

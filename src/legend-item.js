@@ -13,7 +13,7 @@ var { Model, Component, RectPath, Shape } = scene
 
 export default class LegendItem extends RectPath(Shape) {
 
-  _draw(context) {
+  render(context) {
     var {
       left,
       top,

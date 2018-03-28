@@ -1,7 +1,7 @@
 {
   "name": "@things-elements/things-scene-legend",
   "flat": true,
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "The legend component for things-scene.",
   "main": "things-scene-legend-min.js",
   "directories": {
