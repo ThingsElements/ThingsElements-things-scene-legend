@@ -1,6 +1,7 @@
 /*
  * Copyright © HatioLab Inc. All rights reserved.
  */
+import { Model, Component, RectPath, Shape } from '@hatiolab/things-scene'
 
 const NATURE = {
   mutable: false,
@@ -8,8 +9,6 @@ const NATURE = {
   rotatable: false,
   properties: []
 }
-
-var { Model, Component, RectPath, Shape } = scene
 
 export default class LegendItem extends RectPath(Shape) {
 
@@ -40,7 +39,7 @@ export default class LegendItem extends RectPath(Shape) {
   }
 
   onchange(after) {
-    if(after.hasOwnProperty('height'))
+    if (after.hasOwnProperty('height'))
       this.set('paddingLeft', after.height)
   }
 
@@ -57,4 +56,4 @@ export default class LegendItem extends RectPath(Shape) {
   }
 }
 
-scene.Component.register('legend-item', LegendItem);
+Component.register('legend-item', LegendItem);

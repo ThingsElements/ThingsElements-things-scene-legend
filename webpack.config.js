@@ -1,41 +1,69 @@
 const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-
-module.exports = {
-  entry: {
-    "things-scene-legend": "./src/index.js",
-    "things-scene-legend-min": "./src/index.js"
-  },
-  output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, '.')
-  },
-  resolve: {
-    modules: [
-      path.resolve(__dirname, 'node_modules'),
-      path.resolve(__dirname, 'bower_components')
-    ]
-  },
-  module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: [],
-      use: [{
-        loader: 'babel-loader',
-        options: {
-          presets: ["env"]
+  
+  const webpack = require('webpack');
+  const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+  
+  module.exports = {
+    mode: 'production',
+    entry: {
+      "things-scene-legend": ['./src/index.js']
+    },
+    output: {
+      path: path.resolve('./dist'),
+      filename: '[name].js',
+    },
+    resolve: {
+      modules: ['./node_modules']
+    },
+    resolveLoader: {
+      modules: ['./node_modules']
+    },
+    externals: {
+      "@hatiolab/things-scene": "scene"
+    },
+    optimization: {
+      minimize: true,
+    },
+    module: {
+      rules: [{
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/env', {
+                  targets: {
+                    browsers: ['last 2 Chrome versions', 'Safari 10']
+                  },
+                  debug: true
+                }
+              ]
+            ],
+            plugins: []
+          }
         }
+      }, {
+        test: /\.(gif|jpe?g|png)$/,
+        loader: 'url-loader?limit=25000',
+        query: {
+          limit: 10000,
+          name: '[path][name].[hash:8].[ext]'
+        }
+      }, {
+        test: /\.(obj|mtl|tga|3ds|max|dae)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {}
+        }]
       }]
-    }]
-  },
-  devServer: {
-    contentBase: path.join(__dirname, '.'),
-    compress: true,
-    port: 9000
-  },
-  plugins: [
-    new UglifyJSPlugin({
-      test: /\-min\.js$/
-    })
-  ]
-};
+    },
+    plugins: [
+      new UglifyJsPlugin({
+        test: /\-min\.js$/
+      })
+    ],
+    devtool: 'cheap-module-source-map'
+  }
+  
