@@ -3,8 +3,8 @@
   "version": "0.4.5",
   "description": "The legend component for things-scene.",
   "main": "src/index.js",
-  "module": "dist/things-scene-marker.mjs",
-  "jsnext:main": "dist/things-scene-marker.mjs",
+  "module": "dist/things-scene-legend.mjs",
+  "jsnext:main": "dist/things-scene-legend.mjs",
   "things-scene": true,
   "directories": {
     "test": "test"
