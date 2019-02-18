@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/ThingsElements/things-scene-legend#readme",
   "devDependencies": {
-    "@hatiolab/things-shell": "*"
+    "@hatiolab/things-shell": "^0.6.112"
   },
   "dependencies": {
     "@hatiolab/things-scene": "*"
