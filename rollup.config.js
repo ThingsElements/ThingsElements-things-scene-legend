@@ -28,7 +28,8 @@ export default [
         format: "umd",
         globals: {
           "@hatiolab/things-scene": "scene"
-        }
+        },
+        sourcemap: true
       }
     ]
   },
@@ -39,7 +40,8 @@ export default [
     output: [
       {
         file: pkg.module,
-        format: "esm"
+        format: "esm",
+        sourcemap: true
       }
     ]
   }
