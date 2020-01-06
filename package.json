@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/ThingsElements/things-scene-legend#readme",
   "devDependencies": {
-    "@things-factory/board-app": "*",
-    "@things-factory/board-test": "*"
+    "@things-factory/board-app": "^2.0.0",
+    "@things-factory/board-test": "^2.0.0"
   },
   "dependencies": {
     "@hatiolab/things-scene": "*"
